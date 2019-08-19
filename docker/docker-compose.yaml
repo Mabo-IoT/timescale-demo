@@ -1,0 +1,68 @@
+version: '3'
+
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper:latest
+    hostname: zookeeper
+    networks:
+      - timescale
+    ports:
+      - 2181:2181
+    volumes:
+      - zookeeper-data:/opt/zookeeper-3.4.13/data  
+      - zookeeper-conf:/opt/zookeeper-3.4.13/conf
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_PORT: 2181
+      ZOO_SERVERS: server.1=zookeeper:2888:3888
+
+  kafka:
+    image: wurstmeister/kafka:latest
+    hostname: kafka
+    networks:
+      - timescale
+    ports:
+      - 9092:9092
+    volumes:
+      - kafka:/kafka
+    environment:
+      # KAFKA_ADVERTISED_HOST_NAME: ${hostname}
+      KAFKA_ADVERTISED_HOST_NAME: 10.49.21.124
+      KAFKA_CREATE_TOPICS: "test:1:1" # create topic test
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    depends_on:
+      - zookeeper
+
+  grafana:
+    hostname: grafana
+    image: grafana/grafana:latest
+    networks:
+      - timescale
+    expose:
+      - 3000
+    ports:
+      - 3001:3000
+
+  timescaledb:
+    hostname: postgres
+    image: timescale/timescaledb:latest-pg11
+    volumes:
+      - timescale:/var/lib/postgresql/data
+    networks:
+      timescale:
+        aliases:
+          - postgres
+    expose:
+      - 5432
+    ports:
+      - 55435:5432
+
+volumes:
+  timescale:
+  zookeeper-data:
+  zookeeper-conf:
+  kafka:
+
+networks:
+  timescale:
+    
