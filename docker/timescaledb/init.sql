@@ -1,0 +1,3 @@
+CREATE database mabo_iot;
+CREATE USER mabo WITH ENCRYPTED PASSWORD 'patac2016';
+GRANT ALL PRIVILEGES ON DATABASE mabo_iot TO mabo;

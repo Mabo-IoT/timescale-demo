@@ -48,6 +48,7 @@ services:
     image: timescale/timescaledb:latest-pg11
     volumes:
       - timescale:/var/lib/postgresql/data
+      - ./timescaledb/init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       timescale:
         aliases:
@@ -56,6 +57,24 @@ services:
       - 5432
     ports:
       - 55435:5432
+  
+  go-collect:
+    image: go-collect:latest
+    networks: 
+      timescale:
+    depends_on:
+      - kafka
+  
+  go-sender:
+    image: go-sender:latest
+    networks:
+      timescale:
+    depends_on:
+      - kafka
+      - timescaledb
+    volumes:
+      - ./go-sender/conf/conf.toml:$GOPATH/src/github.com/mabo-iot/go-sender/conf/conf.toml
+
 
 volumes:
   timescale:

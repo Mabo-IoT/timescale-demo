@@ -1,0 +1,10 @@
+[kafka]
+address = "kafka:9092"
+topic = "test"
+
+[timescale]
+address = "timescaledb"
+port = 5432
+user = "mabo"
+password = "patac2016"
+db = "mabo_iot"
