@@ -73,7 +73,7 @@ services:
       - kafka
       - timescaledb
     volumes:
-      - ./go-sender/conf/conf.toml:$GOPATH/src/github.com/mabo-iot/go-sender/conf/conf.toml
+      - ./go-sender/conf/conf.toml:/go/src/github.com/mabo-iot/go-sender/conf/conf.toml
 
 
 volumes:
