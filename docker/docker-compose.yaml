@@ -27,7 +27,7 @@ services:
       - kafka:/kafka
     environment:
       # KAFKA_ADVERTISED_HOST_NAME: ${hostname}
-      KAFKA_ADVERTISED_HOST_NAME: 10.49.21.124
+      KAFKA_ADVERTISED_HOST_NAME: kafka
       KAFKA_CREATE_TOPICS: "test:1:1" # create topic test
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
     depends_on:
@@ -72,6 +72,7 @@ services:
     depends_on:
       - kafka
       - timescaledb
+      - go-collect
     volumes:
       - ./go-sender/conf/conf.toml:/go/src/github.com/mabo-iot/go-sender/conf/conf.toml
 
